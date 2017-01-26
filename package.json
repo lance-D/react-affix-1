@@ -1,0 +1,13 @@
+{
+  "name": "react-affix",
+  "version": "0.0.1",
+  "description": "React based replacement for bootstrap-affix",
+  "main": "index.js",
+  "repository": "https://github.com/zrosenbauer/react-affix",
+  "author": "zrosenbauer",
+  "license": "MIT",
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "react": "^15.4.2"
+  }
+}
