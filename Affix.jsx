@@ -1,7 +1,52 @@
 import React, { PropTypes, Component } from 'react';
-import cn from 'classnames';
+
+/**
+ * @param {*} test
+ * @returns {boolean}
+ */
+function isDefined(test) {
+  return test !== 'undefined';
+}
+
+/**
+ *
+ * @param {Object} state
+ * @param {String} className
+ * @returns {String}
+ */
+function getAffixClassNames(state, className) {
+  let affixClassNames = '';
+  if (this.state.affix) {
+    affixClassNames = ' affix';
+  } else if (this.state.affixTop) {
+    affixClassNames = ' affix-top';
+  } else if (this.state.affixBottom) {
+    affixClassNames = ' affix-bottom';
+  }
+
+  return `${className}${affixClassNames}`
+}
+
+/**
+ * @param document
+ * @returns {number}
+ */
+function getScrollTop() {
+  if (isDefined(document.documentElement.scrollTop)) {
+    return document.documentElement.scrollTop;
+  }
+  return document.body.scrollTop;
+}
 
 export default class Affix extends Component {
+
+  static displayName = '@@react-affix/Affix';
+
+  static propTypes = {
+    offsetTop: PropTypes.func,
+    offsetBottom: PropTypes.func,
+    enable: PropTypes.func
+  }
 
   state = {
     affixTop: true,
@@ -15,41 +60,11 @@ export default class Affix extends Component {
     this.updateAffix = this.updateAffix.bind(this)
   }
 
-  /**
-   * @return <void>
-   */
-  updateAffix() {
-    let offsetTop = this.props.offsetTop();
-    let offsetBottom = this.props.offsetBottom();
-    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
-    if (offsetBottom === offsetTop || !this.props.enable()) {
-      this.setState({
-        affix: false,
-        affixBottom: false,
-        affixTop: false
-      });
-    } else {
-      this.setState({
-        affix: scrollTop >= offsetTop && scrollTop <= offsetBottom,
-        affixTop: scrollTop < offsetTop,
-        affixBottom: scrollTop > offsetBottom
-      });
-    }
-  }
-
-  /**
-   * @return <void>
-   */
   componentDidMount() {
     window.addEventListener('scroll', this.updateAffix);
   }
 
-  /**
-   * @return <void>
-   */
   componentWillReceiveProps(nextProps) {
-
     // If affix needs to be disable, disable it here by resetting state
     if (!nextProps.enable()) {
       this.setState({
@@ -60,19 +75,66 @@ export default class Affix extends Component {
     }
   }
 
-  /**
-   * @return <void>
-   */
   componentWillUnmount() {
     window.removeEventListener('scroll', this.updateAffix);
   }
 
+  /**
+   * @type {null|ref}
+   */
+  affix = null;
+
+  /**
+   * @return <void>
+   */
+  updateAffix() {
+    let offsetTop = this.props.offsetTop();
+    let offsetBottom = this.props.offsetBottom();
+    let scrollTop = getScrollTop();
+
+    if (offsetBottom === offsetTop || !this.props.enable()) {
+      this.setState({
+        affix: false,
+        affixBottom: false,
+        affixTop: false,
+      });
+    } else {
+      this.setState({
+        affix: scrollTop >= offsetTop && scrollTop <= offsetBottom,
+        affixTop: scrollTop < offsetTop,
+        affixBottom: scrollTop > offsetBottom,
+      });
+    }
+  }
+
+  enableAffix() {
+    this.setState({
+      affix: true,
+    });
+  }
+
+  disableAffix() {
+    this.setState({
+      affix: false,
+    });
+  }
+
   render() {
-    const { id, className } = this.props;
+    const {
+      className,
+      children,
+      ...rest,
+    } = this.props;
 
     return (
-      <div ref={this.props.ref} id={id} className={cn(className, { affix: this.state.affix, 'affix-bottom': !this.state.affix && this.state.affixBottom, 'affix-top': !this.state.affix && this.state.affixTop })}>
-        {this.props.children}
+      <div
+        {...rest}
+        ref={(ref) => {
+          this.affix = ref;
+        }}
+        className={getAffixClassNames(this.state, className)}
+      >
+        {children}
       </div>
     );
   }
