@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{cheerio-DefinitelyTyped, ejs-DefinitelyTyped, enzyme-DefinitelyTyped, express-DefinitelyTyped, immutable-DefinitelyTyped, jest-DefinitelyTyped, lodash-DefinitelyTyped, node-DefinitelyTyped, react-DefinitelyTyped, react-redux-DefinitelyTyped, react-router-DefinitelyTyped, react-router-redux-DefinitelyTyped, redux-DefinitelyTyped}" />
-    <includedPredefinedLibrary name="ECMAScript 6" />
-  </component>
-</project>
