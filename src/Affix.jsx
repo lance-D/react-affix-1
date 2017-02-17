@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 
 /**
  * @param {*} test
- * @returns {boolean}
+ * @returns {Boolean}
  */
 function isDefined(test) {
   return test !== 'undefined';
@@ -16,11 +16,11 @@ function isDefined(test) {
  */
 function getAffixClassNames(state, className) {
   let affixClassNames = '';
-  if (this.state.affix) {
+  if (state.affix) {
     affixClassNames = ' affix';
-  } else if (this.state.affixTop) {
+  } else if (state.affixTop) {
     affixClassNames = ' affix-top';
-  } else if (this.state.affixBottom) {
+  } else if (state.affixBottom) {
     affixClassNames = ' affix-bottom';
   }
 
@@ -38,7 +38,7 @@ function getScrollTop() {
   return document.body.scrollTop;
 }
 
-export default class Affix extends Component {
+class Affix extends Component {
 
   static displayName = '@@react-affix/Affix';
 
@@ -138,5 +138,6 @@ export default class Affix extends Component {
       </div>
     );
   }
-
 }
+
+export default Affix;
